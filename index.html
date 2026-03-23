@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Advanced MCQ Exam</title>
+
+<style>
+    body {
+        font-family: Arial;
+        background: #eef2f7;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 700px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+        text-align: center;
+    }
+    .timer {
+        text-align: right;
+        font-weight: bold;
+        color: red;
+    }
+    .question {
+        margin-bottom: 20px;
+    }
+    button {
+        padding: 10px 20px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #0056b3;
+    }
+    #result {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Online MCQ Exam</h2>
+    <div class="timer">Time Left: <span id="time">60</span> sec</div>
+
+    <form id="quizForm">
+
+        <div class="question">
+            <p>1. Capital of India?</p>
+            <input type="radio" name="q1" value="a"> Mumbai<br>
+            <input type="radio" name="q1" value="b"> Delhi<br>
+            <input type="radio" name="q1" value="c"> Chennai<br>
+        </div>
+
+        <div class="question">
+            <p>2. HTML stands for?</p>
+            <input type="radio" name="q2" value="a"> Hyper Trainer Marking Language<br>
+            <input type="radio" name="q2" value="b"> Hyper Text Markup Language<br>
+            <input type="radio" name="q2" value="c"> Hyper Text Marketing Language<br>
+        </div>
+
+        <div class="question">
+            <p>3. CSS is used for?</p>
+            <input type="radio" name="q3" value="a"> Styling<br>
+            <input type="radio" name="q3" value="b"> Programming<br>
+            <input type="radio" name="q3" value="c"> Database<br>
+        </div>
+
+        <button type="button" onclick="submitQuiz()">Submit</button>
+    </form>
+
+    <div id="result"></div>
+</div>
+
+<script>
+let timeLeft = 60;
+let timer = setInterval(updateTimer, 1000);
+
+function updateTimer() {
+    document.getElementById("time").textContent = timeLeft;
+    timeLeft--;
+
+    if (timeLeft < 0) {
+        clearInterval(timer);
+        alert("Time's up! Auto submitting...");
+        submitQuiz();
+    }
+}
+
+function submitQuiz() {
+    clearInterval(timer);
+
+    let answers = {
+        q1: "b",
+        q2: "b",
+        q3: "a"
+    };
+
+    let score = 0;
+    let negative = 0;
+    let form = document.forms["quizForm"];
+    let total = Object.keys(answers).length;
+
+    let resultText = "";
+
+    for (let q in answers) {
+        let selected = form[q].value;
+
+        if (!selected) {
+            resultText += q + ": Not Answered<br>";
+        } 
+        else if (selected === answers[q]) {
+            score++;
+            resultText += q + ": Correct<br>";
+        } 
+        else {
+            negative += 0.25; // negative marking
+            resultText += q + ": Wrong (Correct: " + answers[q] + ")<br>";
+        }
+    }
+
+    let finalScore = score - negative;
+
+    document.getElementById("result").innerHTML =
+        "Score: " + finalScore + " / " + total +
+        "<br><br>Details:<br>" + resultText;
+}
+</script>
+
+</body>
+</html>
